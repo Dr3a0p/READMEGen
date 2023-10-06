@@ -1,7 +1,56 @@
 
+const fs = require('fs')
+const inquirer = require('inquirer');
+
+function generateBadge(license) {
+    if (license === 'MIT') {
+        return (`[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)`)
+    }else if (license === 'MPL') {
+        return ('[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)');
+    }else if (license === 'IBM'){
+        return ('[![License: IPL 1.0](https://img.shields.io/badge/License-IPL_1.0-blue.svg)](https://opensource.org/licenses/IPL-1.0)');
+    }else{
+        return (' ');
+    }
+}
+const generateMarkDown = response => {
+return `# ${response.title}
+${generateBadge(response.license)}
+## description 
+${response.description}
+# Table of Contents
+1. [description](##description)
+2. [installation](##installation)
+3. [usage](##usage)
+4. [credits](##credits)
+5. [license](##license)
+6. [questions](##questions)
+
+
+## installation
+${response.install}
+
+## usage
+${response.usage}
+
+## Credit
+Shout out to ${response.credit}
+
+## Questions
+for any questions or concerns you may contact me at my GitHub, ${response.gitHub} or by email at ${response.email}
+
+## license
+licensed under ${response.license}
+`
+}
+
+
 // Array of questions for user input
-const questions = [
+const questions = () =>
+{
+return inquirer.prompt([
     {
+    
         type: 'input',
         name: 'title',
         message: 'What is the title of your project? (Required)',
@@ -22,20 +71,19 @@ const questions = [
             if (githubInput) {
                 return true;
             } else {
-                console.log('Please enter your GitHub username!');
+                console.log('Please enter your gitHub username.');
                 return false;
             }
         }
     },
     {
         type: 'input',
-        name: 'email',
-        message: 'What is your email address? (Required)',
+        message: 'what was your motivation for building this project?',
         validate: githubInput => {
             if (githubInput) {
                 return true;
             } else {
-                console.log('Please enter your email address!');
+                console.log('please input your motivation for building this project');
                 return false;
             }
         }
@@ -49,19 +97,6 @@ const questions = [
                 return true;
             } else {
                 console.log('Please enter what your project is!');
-                return false;
-            }
-        }
-    },
-    {
-        type: 'input',
-        name: 'why',
-        message: 'Why did you create this project? (Required)',
-        validate: whyInput => {
-            if (whyInput) {
-                return true;
-            } else {
-                console.log('Please enter why you created this project!');
                 return false;
             }
         }
@@ -137,22 +172,10 @@ const questions = [
             }
         }
     },
-    {
-        type: 'input',
-        name: 'test',
-        message: 'Please provide instructions on how to test the app. (Required)',
-        validate: testInput => {
-            if (testInput) {
-                return true;
-            } else {
-                console.log('Please enter your use test instructions!');
-                return false;
-            }
-        }
-    }
-];
+])
+};
 
-// function to write README file
+// TODO create function to write README file
 const writeFile = fileContent => {
     return new Promise((resolve, reject) => {
         fs.writeFile('./dist/generated-README.md', fileContent, err => {
@@ -169,7 +192,7 @@ const writeFile = fileContent => {
     });
 };
 
-// function to prompt questions and store user inputs
+// TO create function to prompt questions and store user inputs
 const init = () => {
 
     return inquirer.prompt(questions)
@@ -178,7 +201,7 @@ const init = () => {
     })
 }
 
-// Function call to initialize app
+// TODO create function call to initialize app
 init()
 .then(readmeData => {
     console.log(readmeData);
