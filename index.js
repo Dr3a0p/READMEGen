@@ -128,19 +128,6 @@ return inquirer.prompt([
         }
     },
     {
-        type: 'input',
-        name: 'usage',
-        message: 'Please provide instructions and examples for use. (Required)',
-        validate: usageInput => {
-            if (usageInput) {
-                return true;
-            } else {
-                console.log('Please enter your use instructions!');
-                return false;
-            }
-        }
-    },
-    {
         type: 'list',
         name: 'license',
         message: 'Which license will you use for your project?',
